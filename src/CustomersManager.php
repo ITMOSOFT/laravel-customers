@@ -2,7 +2,6 @@
 
 namespace ItmoSoft\Customers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use ItmoSoft\Customers\Models\Customer;
@@ -14,7 +13,7 @@ class CustomersManager
     {
         $model = config('customers.models.customer', Customer::class);
 
-        return $model::create($this->customerAttributes($attributes));
+        return $model::create($this->customerAttributes($attributes))->refresh();
     }
 
     public function update(Customer $customer, array $attributes): Customer
@@ -42,7 +41,7 @@ class CustomersManager
                 $customer->addresses()->where('type', $type)->update(['is_default' => false]);
             }
 
-            $address = new $model();
+            $address = new $model;
             $address->fill([
                 'type' => $type,
                 'label' => $attributes['label'] ?? null,
