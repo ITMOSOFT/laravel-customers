@@ -10,7 +10,7 @@ return new class extends Migration
     {
         $prefix = config('customers.table_prefix', 'itmosoft_');
 
-        Schema::create($prefix.'customer_addresses', function (Blueprint $table): void {
+        Schema::create($prefix.'customer_addresses', function (Blueprint $table) use ($prefix): void {
             $table->id();
             $table->foreignId('customer_id')->constrained($prefix.'customers')->cascadeOnDelete();
             $table->string('type', 20)->default('shipping')->index();
@@ -34,6 +34,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(config('customers.table_prefix', 'itmosoft_').'customer_addresses');
+        $prefix = config('customers.table_prefix', 'itmosoft_');
+        Schema::dropIfExists($prefix.'customer_addresses');
     }
 };
